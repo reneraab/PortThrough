@@ -1,14 +1,14 @@
 {
-  "name": "PortThrough",
-  "version": "0.0.1",
-  "author": {
-    "name": "René Raab",
-    "email": "mail@reneraab.org",
-    "url": "https://reneraab.org"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "socket.io": "^1.2.1",
-    "socket.io-client": "^1.2.1"
-  }
+	"name": "PortThrough",
+	"version": "0.0.1",
+	"author": {
+		"name": "René Raab",
+		"email": "mail@reneraab.org",
+		"url": "https://reneraab.org"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"socket.io": "^1.2.1",
+		"socket.io-client": "^1.2.1"
+	}
 }
