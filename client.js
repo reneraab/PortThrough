@@ -1,35 +1,6 @@
-var address = process.argv[2] || "http://127.0.0.1:37423"
-console.log("Using server " + address + ".");
-
-var net = require("net");
-var io = require("socket.io-client")(address);
-
-var TCPPort = require("./client/TCPPort.js");
-var UDPPort = require("./client/UDPPort.js");
-
-io.on("connect", function() {
-	console.log("Connected to server.");
-
-	io.on("TCPconnection", function(cfg) {
-		TCPPort.ports[cfg.port].newConnection(cfg.sid);
-	});
-	io.on("TCPdata", function(cfg) {
-		TCPPort.ports[cfg.port].sendData(cfg.sid, cfg.data);
-	});
-	io.on("TCPend", function(cfg) {
-		TCPPort.ports[cfg.port].closeConnection(cfg.sid);
-	});
-
-	io.on("UDPdata", function(cfg) {
-		UDPPort.ports[cfg.port].sendData(cfg.data);
-	});
-
-	io.on("disconnect", function() {
-		TCPPort.clearAll();
-	});
+var client = new (require("./client/Client.js"))({
+	address: process.argv[2] || "http://127.0.0.1:37423"
 });
-
-
 
 process.stdin.resume();
 process.stdin.setEncoding("utf8");
@@ -45,8 +16,8 @@ process.stdin.on("data", function(chunk) {
 	chunk = chunk.toString().trim();
 	if (chunk !== null) {
 		if (chunk === "list") {
-			console.log("TCP ports: " + Object.keys(TCPPort.ports).join(", "));
-			console.log("UDP ports: " + Object.keys(UDPPort.ports).join(", "));
+			console.log("TCP ports: " + client.getTCPPorts().join(", "));
+			console.log("UDP ports: " + client.getUDPPorts().join(", "));
 		} else if (chunk == "usage") {
 			returnUsage();
 		} else {
@@ -56,10 +27,10 @@ process.stdin.on("data", function(chunk) {
 			var method = parts[0];
 			if (type == "tcp") {
 				if (method == "add") {
-					new TCPPort(port, io);
+					client.addTCPPort(port);
 				} else if (method == "remove") {
 					try {
-						TCPPort.ports[port].destroy();
+						client.removeTCPPort(port);
 					} catch(e) {
 						console.log(e);
 					}
@@ -68,10 +39,10 @@ process.stdin.on("data", function(chunk) {
 				}
 			} else if (type == "udp") {
 				if (method == "add") {
-					new UDPPort(port, io);
+					client.addUDPPort(port);
 				} else if (method == "remove") {
 					try {
-						UDPPort.ports[port].destroy();
+						client.removeUDPPort(port);
 					} catch(e) {
 						console.log(e);
 					}
