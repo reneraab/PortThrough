@@ -1,13 +1,19 @@
 {
 	"name": "PortThrough",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"author": {
 		"name": "René Raab",
 		"email": "mail@reneraab.org",
 		"url": "https://reneraab.org"
 	},
+	"bin": {
+		"portthrough": "./cli.js"
+	},
+	"repository": "https://github.com/reneraab/PortThrough.git",
+	"main": "./api.js",
 	"license": "MIT",
 	"dependencies": {
+		"commander": "^2.8.0",
 		"socket.io": "^1.2.1",
 		"socket.io-client": "^1.2.1"
 	}
